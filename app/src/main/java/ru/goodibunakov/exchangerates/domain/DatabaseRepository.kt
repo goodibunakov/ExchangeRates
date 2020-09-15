@@ -1,12 +1,11 @@
 package ru.goodibunakov.exchangerates.domain
 
 import io.reactivex.Completable
+import ru.goodibunakov.exchangerates.domain.model.CurrencyEntity
 
 interface DatabaseRepository {
-    /**
-     * Вставить в БД лист плейлистов youtube-канала
-     */
-    fun insert(currencyList: List<Currency>): Completable
+
+    fun insert(currencyList: List<CurrencyEntity>): Completable
 
 //    /**
 //     * Удалить все плейлисты в БД

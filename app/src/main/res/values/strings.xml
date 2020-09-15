@@ -3,4 +3,5 @@
     <string name="enter_field_hint">Введите сумму в рублях</string>
     <string name="button_text">Погнали!</string>
     <string name="reload_data">Обновить данные</string>
+    <string name="error_empty_input">Поле не должно быть пустым</string>
 </resources>

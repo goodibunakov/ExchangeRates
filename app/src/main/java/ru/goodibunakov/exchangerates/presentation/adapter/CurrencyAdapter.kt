@@ -1,4 +1,4 @@
-package ru.goodibunakov.exchangerates.presentation
+package ru.goodibunakov.exchangerates.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item.view.*
 import ru.goodibunakov.exchangerates.R
-import ru.goodibunakov.exchangerates.domain.Currency
+import ru.goodibunakov.exchangerates.presentation.model.CurrencyUi
 
 class CurrencyAdapter(
-    private val clickListener: (String) -> Unit
-) : ListAdapter<Currency, CurrencyAdapter.CurrencyViewHolder>(DiffCallback) {
+    private val clickListener: (CurrencyUi) -> Unit
+) : ListAdapter<CurrencyUi, CurrencyAdapter.CurrencyViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyViewHolder =
         CurrencyViewHolder(
@@ -27,21 +27,21 @@ class CurrencyAdapter(
 
     class CurrencyViewHolder(
         override val containerView: View,
-        private val clickListener: (String) -> Unit
+        private val clickListener: (CurrencyUi) -> Unit
     ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-        fun bind(item: Currency) {
+        fun bind(item: CurrencyUi) {
             containerView.title.text = item.name
             containerView.code.text = item.charCode
-            containerView.setOnClickListener { clickListener(item.id) }
+            containerView.setOnClickListener { clickListener(item) }
         }
     }
 
-    object DiffCallback : DiffUtil.ItemCallback<Currency>() {
-        override fun areItemsTheSame(oldItem: Currency, newItem: Currency) =
+    object DiffCallback : DiffUtil.ItemCallback<CurrencyUi>() {
+        override fun areItemsTheSame(oldItem: CurrencyUi, newItem: CurrencyUi) =
             oldItem.id == newItem.id
 
-        override fun areContentsTheSame(oldItem: Currency, newItem: Currency) =
+        override fun areContentsTheSame(oldItem: CurrencyUi, newItem: CurrencyUi) =
             oldItem.id == newItem.id
     }
 }

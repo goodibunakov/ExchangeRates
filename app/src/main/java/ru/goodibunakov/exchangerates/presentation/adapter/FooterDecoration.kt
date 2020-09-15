@@ -1,4 +1,4 @@
-package ru.goodibunakov.exchangerates.domain
+package ru.goodibunakov.exchangerates.presentation.adapter
 
 import android.graphics.Rect
 import android.view.View

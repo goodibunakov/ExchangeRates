@@ -1,17 +1,20 @@
 package ru.goodibunakov.exchangerates.data.dto
 
 import com.google.gson.annotations.SerializedName
-import ru.goodibunakov.exchangerates.domain.Currency
 
 data class CurrencyDTO(
-    @SerializedName("Date")
-    val date: String,
-    @SerializedName("PreviousDate")
-    val previousDate: String,
-    @SerializedName("PreviousURL")
-    val previousURL: String,
-    @SerializedName("Timestamp")
-    val timestamp: String,
-    @SerializedName("Valute")
-    val valute: Map<String, Currency>
+    @SerializedName("CharCode")
+    val charCode: String,
+    @SerializedName("ID")
+    val id: String,
+    @SerializedName("Name")
+    val name: String,
+    @SerializedName("Nominal")
+    val nominal: Int,
+    @SerializedName("NumCode")
+    val numCode: String,
+    @SerializedName("Previous")
+    val previous: Double,
+    @SerializedName("Value")
+    val value: Double
 )

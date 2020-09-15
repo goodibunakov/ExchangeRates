@@ -9,7 +9,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import ru.goodibunakov.exchangerates.BuildConfig
-import ru.goodibunakov.exchangerates.data.dto.CurrencyDTO
+import ru.goodibunakov.exchangerates.data.dto.CurrencyResponseDTO
 import java.util.concurrent.TimeUnit
 
 
@@ -17,7 +17,7 @@ interface ApiService {
 
 
     @GET("daily_json.js")
-    fun getData(): Single<CurrencyDTO>
+    fun getData(): Single<CurrencyResponseDTO>
 
 
     companion object {
