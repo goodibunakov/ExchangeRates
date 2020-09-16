@@ -1,7 +1,7 @@
 package ru.goodibunakov.exchangerates.data
 
 import com.google.gson.GsonBuilder
-import io.reactivex.Single
+import io.reactivex.Observable
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -17,7 +17,7 @@ interface ApiService {
 
 
     @GET("daily_json.js")
-    fun getData(): Single<CurrencyResponseDTO>
+    fun getData(): Observable<CurrencyResponseDTO>
 
 
     companion object {

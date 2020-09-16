@@ -12,6 +12,7 @@ import ru.goodibunakov.exchangerates.domain.usecase.GetDataUseCase
 import ru.goodibunakov.exchangerates.presentation.ToCurrencyUiMapper
 import ru.goodibunakov.exchangerates.presentation.model.CurrencySaved
 import ru.goodibunakov.exchangerates.presentation.model.CurrencyUi
+import java.util.concurrent.TimeUnit
 
 class MainViewModel(
     private val getDataUseCase: GetDataUseCase,
@@ -25,6 +26,7 @@ class MainViewModel(
 
     val savedCurrencyLiveData = MutableLiveData<CurrencySaved?>()
     val resultLiveData = MutableLiveData<String>()
+    val showLoadingLiveData = MutableLiveData(false)
 
     init {
         getData()
@@ -48,6 +50,9 @@ class MainViewModel(
             .map { ToCurrencyUiMapper.map(it) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe { showLoadingLiveData.value = true }
+            .doOnError { showLoadingLiveData.value = false }
+            .doOnNext { showLoadingLiveData.value = false }
             .subscribe({
                 dataLiveData.value = it
                 errorLiveData.value = false
@@ -61,6 +66,24 @@ class MainViewModel(
         localRepository.save(item).subscribe().addTo(compositeDisposable)
     }
 
+    fun update() {
+        getDataUseCase.updateDb()
+            .repeatWhen { objectObservable -> objectObservable.delay(30, TimeUnit.SECONDS) }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .map { ToCurrencyUiMapper.map(it) }
+            .doOnSubscribe { showLoadingLiveData.value = true }
+            .doOnError { showLoadingLiveData.value = false }
+            .doOnNext { showLoadingLiveData.value = false }
+            .subscribe({
+                dataLiveData.value = it
+                errorLiveData.value = false
+            }, {
+                errorLiveData.value = true
+            })
+            .addTo(compositeDisposable)
+    }
+
     override fun onCleared() {
         compositeDisposable.dispose()
         super.onCleared()
@@ -70,7 +93,7 @@ class MainViewModel(
         Single.fromCallable {
             enterText.toFloat() / savedCurrencyLiveData.value!!.value / savedCurrencyLiveData.value!!.nominal
         }
-            .subscribeOn(Schedulers.io())
+            .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 resultLiveData.value = String.format("%.03f", it)

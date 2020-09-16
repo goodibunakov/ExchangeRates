@@ -1,9 +1,9 @@
 package ru.goodibunakov.exchangerates.presentation.view
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.goodibunakov.exchangerates.App
@@ -22,8 +22,13 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         super.onCreate(savedInstanceState)
 
         initRecycler()
+        viewModel.showLoadingLiveData.observe(
+            this,
+            { progress.visibility = if (it) View.VISIBLE else View.GONE })
         viewModel.dataLiveData.observe(this, { setData(it) })
-        viewModel.errorLiveData.observe(this, { })
+        viewModel.errorLiveData.observe(this, {
+
+        })
         viewModel.savedCurrencyLiveData.observe(this, {
             btnGo.isEnabled = it != null && it.charCode.isNotEmpty()
             code.text = it?.charCode
@@ -39,6 +44,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         }
 
         viewModel.resultLiveData.observe(this, { result.text = it })
+
+        update.setOnClickListener { viewModel.update() }
     }
 
     private fun initRecycler() {
